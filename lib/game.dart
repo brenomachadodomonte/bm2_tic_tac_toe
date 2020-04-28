@@ -7,10 +7,9 @@ class Game extends StatefulWidget {
 
 class _GameState extends State<Game> {
 
-  String _message = 'IT\'S TURN OF X';
   IconData _currentIcon = Icons.clear;
-  int moves = 0;
-  bool playing = true;
+  int _moves = 0;
+  bool _playing = true;
 
   List _blocks = [];
 
@@ -29,9 +28,7 @@ class _GameState extends State<Game> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text('BM2'),
-            Text('TIC TAC TOE', style: TextStyle(fontSize: 18),),
-            SizedBox(height: 20,),
-            Text(_message, style: TextStyle(fontSize: 34),),
+            Text('TIC TAC TOE', style: TextStyle(fontSize: 22),),
             GridView.count(
                 crossAxisCount: 3,
                 shrinkWrap: true,
@@ -97,33 +94,55 @@ class _GameState extends State<Game> {
 
   _changeBlock(int number){
     setState(() {
-      if(playing){
-        moves++;
+      if(_playing){
+        _moves++;
         _blocks[number]['widget'] = Center(child: Icon(_currentIcon, size: 80));
         if(_currentIcon == Icons.clear){
           _currentIcon = Icons.panorama_fish_eye;
           _blocks[number]['value'] = 0;
-          _message = 'IT\'S TURN OF O';
         } else {
           _blocks[number]['value'] = 1;
           _currentIcon = Icons.clear;
-          _message = 'IT\'S TURN OF X';
         }
       }
     });
 
-    if(moves >= 5) {
+    if(_moves >= 5) {
       _checkWinner();
     }
   }
 
   _checkWinner(){
-    //TODO: check if there is a Winner
-    //If moves = 9 and there's no Winner, its draw!
+    //Rows
+    _checkPath(0, 1, 2);
+    _checkPath(3, 4, 5);
+    _checkPath(6, 7, 8);
+    //Columns
+    _checkPath(0, 3, 6);
+    _checkPath(1, 4, 7);
+    _checkPath(2, 5, 8);
+    //Diagonals
+    _checkPath(0, 4, 8);
+    _checkPath(2, 4, 6);
+  }
+
+  _checkPath(int init, int middle, int end){
+    bool equals = _blocks[init]['value'] != -1 && _blocks[init]['value'] == _blocks[middle]['value'] && _blocks[init]['value'] == _blocks[end]['value'];
+    if(equals){
+      setState(() {
+        _playing = false;
+        _blocks[init]['widget'] = Container(color: Colors.grey[300],child: _blocks[init]['widget']);
+        _blocks[middle]['widget'] = Container(color: Colors.grey[300],child: _blocks[middle]['widget']);
+        _blocks[end]['widget'] = Container(color: Colors.grey[300],child: _blocks[end]['widget']);
+      });
+    }
   }
 
   _clearBlocks(){
     setState(() {
+      _playing = true;
+      _currentIcon = Icons.clear;
+      _moves = 0;
       _blocks = [
         {'widget': InkWell(onTap: (){ _changeBlock(0); }), 'value': -1},
         {'widget': InkWell(onTap: (){ _changeBlock(1); }), 'value': -1},
