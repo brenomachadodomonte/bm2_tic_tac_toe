@@ -32,46 +32,7 @@ class _GameState extends State<Game> {
             GridView.count(
                 crossAxisCount: 3,
                 shrinkWrap: true,
-                children: [
-                  Container(
-                      child: _blocks[0]['widget'],
-                      decoration: _boxDecoration(right: true, bottom: true)
-                  ),
-                  Container(
-                      child: _blocks[1]['widget'],
-                      decoration: _boxDecoration(right: true, bottom: true, left: true),
-                  ),
-                  Container(
-                      child: _blocks[2]['widget'],
-                      decoration: _boxDecoration(left: true, bottom: true)
-                  ),
-
-                  Container(
-                      child: _blocks[3]['widget'],
-                      decoration: _boxDecoration(right: true, bottom: true, top: true)
-                  ),
-                  Container(
-                      child: _blocks[4]['widget'],
-                      decoration: _boxDecoration(right: true, bottom: true, top: true, left: true)
-                  ),
-                  Container(
-                      child: _blocks[5]['widget'],
-                      decoration: _boxDecoration(bottom: true, top: true, left: true)
-                  ),
-
-                  Container(
-                      child: _blocks[6]['widget'],
-                      decoration: _boxDecoration(right: true, top: true)
-                  ),
-                  Container(
-                      child: _blocks[7]['widget'],
-                      decoration: _boxDecoration(right: true, top: true, left: true)
-                  ),
-                  Container(
-                      child: _blocks[8]['widget'],
-                      decoration: _boxDecoration(top: true, left: true)
-                  ),
-                ]
+                children: _buildGrid()
             ),
             SizedBox(height: 30),
             FloatingActionButton.extended(
@@ -85,6 +46,22 @@ class _GameState extends State<Game> {
         )
       ),
     );
+  }
+
+  _buildGrid(){
+    return List.generate(9, (index){
+      //Borders
+      bool left = [1, 4, 7, 2, 5, 8].contains(index);
+      bool right = [1, 4, 7, 0, 3, 6].contains(index);
+      bool top = [3, 4, 5, 6, 7, 8].contains(index);
+      bool bottom = [3, 4, 5, 0, 1, 2].contains(index);
+
+      return Container(
+          child: _blocks[index]['widget'],
+          decoration: _boxDecoration(right: right, top: top, left: left, bottom: bottom)
+      );
+    });
+
   }
 
   _changeBlock(int number){
