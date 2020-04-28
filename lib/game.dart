@@ -41,14 +41,9 @@ class _GameState extends State<Game> {
                       child: _blocks[1]['widget'],
                       decoration: _boxDecoration(right: true, bottom: true, left: true),
                   ),
-                  InkWell(
-                    child: Container(
-                        child: _blocks[2]['widget'],
-                        decoration: _boxDecoration(left: true, bottom: true)
-                    ),
-                    onTap: (){
-
-                    },
+                  Container(
+                      child: _blocks[2]['widget'],
+                      decoration: _boxDecoration(left: true, bottom: true)
                   ),
 
                   Container(
